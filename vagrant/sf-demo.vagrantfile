@@ -1,0 +1,16 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+require "yaml"
+settings = YAML.load_file File.expand_path("sf-demo-settings.yml", File.dirname(__FILE__))
+Vagrant.configure(2) do |config|
+    config.vm.define settings["runtime_name"] do |machine|
+        machine.vm.box = settings["name"]
+        machine.vm.hostname = settings["runtime_name"]
+        machine.vm.provider :virtualbox do |provider|
+            provider.name = settings["runtime_name"]
+        end
+        machine.vm.network :private_network, ip: settings["ip"]
+        machine.vm.synced_folder ".", "/vagrant", "type": :nfs
+    end
+end
