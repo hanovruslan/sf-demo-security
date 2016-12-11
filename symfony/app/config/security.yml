@@ -1,0 +1,22 @@
+# To get started with security, check out the documentation:
+# http://symfony.com/doc/current/book/security.html
+security:
+    providers:
+        token:
+            id: app.token_user_provider
+    firewalls:
+        public:
+            stateless: true
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        admin:
+            stateless: true
+            pattern: ^/
+            anonymous: ~
+            logout: ~
+            guard:
+                authenticators:
+                    - app.token_authenticator
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/, roles: ROLE_USER }
