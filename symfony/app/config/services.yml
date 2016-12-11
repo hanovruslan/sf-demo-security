@@ -5,9 +5,13 @@ parameters:
     app.class.token_user_provider: AppBundle\Security\User\TokenUserProvider
 
 services:
-    app.token_authenticator:
+    app.security.authenticator_token:
         class: "%app.class.token_authenticator%"
-    app.token_user_provider:
+    app.security.authenticator_hour_filter_token:
+        class: "%app.class.token_authenticator%"
+        arguments:
+            - true
+    app.provider.user_token:
         class: "%app.class.token_user_provider%"
         arguments:
             - "@doctrine.orm.default_entity_manager"

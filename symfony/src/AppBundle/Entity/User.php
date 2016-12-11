@@ -41,8 +41,8 @@ class User implements UserInterface
     public function getRoles()
     {
         return [
-            'ROLE_ADMIN',
-            'ROLE_USER',
+            'ROLE_CLIENT',
+            'ROLE_MANAGER',
         ];
     }
 

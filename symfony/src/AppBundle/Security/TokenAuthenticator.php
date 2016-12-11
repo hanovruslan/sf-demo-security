@@ -18,6 +18,14 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 {
     const VALUE_TOKEN = 'X-AUTH-TOKEN';
     const KEY_TOKEN = 'token';
+
+    protected $useHourFilter = false;
+
+    public function __construct($useHourFilter = false)
+    {
+        $this->useHourFilter = $useHourFilter;
+    }
+
     /**
      * Called on every request. Return whatever credentials you want,
      * or null to stop authentication.
@@ -55,7 +63,9 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
-        return true;
+        return $this->useHourFilter
+            ? !(date('H') % 2)
+            : true;
     }
 
     /**
