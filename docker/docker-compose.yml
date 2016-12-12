@@ -9,7 +9,6 @@ services:
         ports:
             - "9000:9000"
         volumes:
-#            - ./volume/var/run:/var/run
             - ./../symfony:/usr/share/sf-security-demo
     db:
         build: ./mysql

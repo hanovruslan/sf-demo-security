@@ -35,13 +35,13 @@ class TokenUserProvider implements UserProviderInterface
         $user = $repository->findOneBy([
             'token' => $token,
         ]);
-        if ($user instanceof $this->class) {
-            return $user;
+        if (!($user instanceof $this->class)) {
+            throw new UsernameNotFoundException(
+                sprintf('Unable to load user by token "%s"', $token)
+            );
         }
 
-        throw new UsernameNotFoundException(
-            sprintf('Unable to load user by token "%s"', $token)
-        );
+        return $user;
     }
 
     /**
