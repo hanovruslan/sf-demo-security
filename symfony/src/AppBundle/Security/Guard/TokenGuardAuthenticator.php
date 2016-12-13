@@ -1,12 +1,13 @@
 <?
 
-namespace AppBundle\Security;
+namespace AppBundle\Security\Guard;
 
 use AppBundle\Security\User\TokenUserProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -14,52 +15,49 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class TokenAuthenticator extends AbstractGuardAuthenticator
+class TokenGuardAuthenticator extends AbstractGuardAuthenticator
 {
-    const VALUE_TOKEN = 'X-AUTH-TOKEN';
-    const KEY_TOKEN = 'token';
+    const HEADER = 'X-AUTH-TOKEN';
+    const CREDENTIAL_KEY = 'token';
 
+    /** @var bool */
     protected $useHourFilter = false;
 
+    /**
+     * @param bool $useHourFilter
+     */
     public function __construct($useHourFilter = false)
     {
         $this->useHourFilter = $useHourFilter;
     }
 
     /**
-     * Called on every request. Return whatever credentials you want,
-     * or null to stop authentication.
-     * @param Request $request
-     * @return array|null
+     * {@inheritdoc}
      */
     public function getCredentials(Request $request)
     {
-        return ($value = $request->headers->get(self::VALUE_TOKEN))
-            ? [self::KEY_TOKEN => $value]
+        return ($value = $request->headers->get(self::HEADER))
+            ? [self::CREDENTIAL_KEY => $value]
             : null;
     }
 
     /**
      * if null, authentication will fail
      * if a User object, checkCredentials() is called
+     *
      * @param mixed $credentials
-     * @param UserProviderInterface | TokenUserProvider $userProvider
+     * @param UserProviderInterface|TokenUserProvider $userProvider
      *
      * @return UserInterface
+     * @throws UsernameNotFoundException if the user is not found
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        return $userProvider->loadUserByToken($credentials[self::KEY_TOKEN]);
+        return $userProvider->loadUserByToken($credentials[self::CREDENTIAL_KEY]);
     }
 
     /**
-     * check credentials - e.g. make sure the password is valid
-     * no credential check is needed in this case
-     * return true to cause authentication success
-     *
-     * @param mixed $credentials
-     * @param UserInterface $user
-     * @return bool
+     * {@inheritdoc}
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
@@ -69,10 +67,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     }
 
     /**
-     * @param Request $request
-     * @param TokenInterface $token
-     * @param string $providerKey
-     * @return null
+     * {@inheritdoc}
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
@@ -80,14 +75,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     }
 
     /**
-     * to translate this message
-     * $this->translator->trans($exception->getMessageKey(), $exception->getMessageData())
-     *
-     * @param Request $request
-     * @param AuthenticationException|null $exception
-     *
-     * @throws UnauthorizedHttpException
-     * @return void
+     * {@inheritdoc}
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
@@ -100,13 +88,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     }
 
     /**
-     * Called when authentication is needed, but it's not sent
-     *
-     * @param Request $request
-     * @param AuthenticationException|null $authException
-     *
-     * @throws AccessDeniedHttpException
-     * @return void
+     * {@inheritdoc}
      */
     public function start(Request $request, AuthenticationException $authException = null)
     {
@@ -120,7 +102,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function supportsRememberMe()
     {

@@ -1,7 +1,8 @@
 # Learn more about services, parameters and containers at
 # http://symfony.com/doc/current/book/service_container.html
 parameters:
-    app.class.token_authenticator: AppBundle\Security\TokenAuthenticator
+    app.class.token_authenticator: AppBundle\Security\Guard\TokenGuardAuthenticator
+    app.class.public_morozov_authenticator: AppBundle\Security\Guard\PublicMorozovGuardAuthenticator
     app.class.token_user_provider: AppBundle\Security\User\TokenUserProvider
 
 services:
@@ -11,6 +12,8 @@ services:
         class: "%app.class.token_authenticator%"
         arguments:
             - true
+    app.security.authenticator_public_morozov:
+        class: "%app.class.public_morozov_authenticator%"
     app.provider.user_token:
         class: "%app.class.token_user_provider%"
         arguments:

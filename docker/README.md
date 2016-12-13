@@ -21,7 +21,7 @@ docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}} {{.N
 add dep into app
 
 ```
-docker run -ti --rm -v /vagrant/symfony:/app -u www-data composer/composer:1.0 require doctrine/doctrine-migrations-bundle "^1.1.1"
+docker run -ti --rm -v /vagrant/symfony:/app composer/composer:1.0 require doctrine/doctrine-migrations-bundle "^1.1.1"
 ```
 
 migrate db
@@ -34,4 +34,10 @@ fill db with test data
 
 ```
 docker exec -ti docker_back_1 bin/console d:f:l -n --purge-with-truncate --multiple-transactions
+```
+
+clear cache
+
+```
+docker exec -ti docker_back_1 bin/console c:c -vvv [-e prod]
 ```

@@ -16,6 +16,15 @@ security:
             pattern: ^/admin
             provider: token
             stateless: true
+        morozov:
+            guard:
+                entry_point: app.security.authenticator_public_morozov
+                authenticators:
+                    - app.security.authenticator_public_morozov
+                    - app.security.authenticator_token
+            pattern: ^/morozov
+            provider: token
+            stateless: true
         main:
             guard:
                 authenticators:

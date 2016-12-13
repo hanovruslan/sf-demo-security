@@ -10,13 +10,11 @@ use Symfony\Component\HttpFoundation\Request;
 class DefaultController extends Controller
 {
     /**
-     * @param Request $request
-     *
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @Route("/", name="homepage")
      */
-    public function homepageAction(Request $request)
+    public function homepageAction()
     {
         return $this->render('default/index.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
@@ -24,15 +22,25 @@ class DefaultController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @Route("/admin", name="admin")
      */
-    public function adminAction(Request $request)
+    public function adminAction()
     {
         return $this->render('default/admin.html.twig', [
+            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+        ]);
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/morozov", name="morozov")
+     */
+    public function morozovAction()
+    {
+        return $this->render('default/morozov.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
         ]);
     }
