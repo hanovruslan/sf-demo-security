@@ -26,18 +26,47 @@ class TokenUserProvider implements UserProviderInterface
      */
     public function loadUserByUsername($username = null)
     {
-        //for compatibility
+        return $this->loadUserByAttribute('username', $username);
     }
 
+    /**
+     * Loads the user for the given token.
+     *
+     * This method must throw UsernameNotFoundException if the user is not
+     * found.
+     *
+     * @param string $token The token
+     *
+     * @return UserInterface
+     *
+     * @throws UsernameNotFoundException if the user is not found
+     */
     public function loadUserByToken($token = null)
     {
+        return $this->loadUserByAttribute('token', $token);
+    }
+
+    /**
+     * @param $name
+     * @param null $value
+     *
+     * @return UserInterface
+     *
+     * @throws UsernameNotFoundException if the user is not found
+     */
+    protected function loadUserByAttribute($name, $value = null)
+    {
+        /** @var User|null $user */
+        $user = null;
         $repository = $this->entityManager->getRepository($this->class);
-        $user = $repository->findOneBy([
-            'token' => $token,
-        ]);
+        if (null !== $value) {
+            $user = $repository->findOneBy([
+                $name => $value,
+            ]);
+        }
         if (!($user instanceof $this->class)) {
             throw new UsernameNotFoundException(
-                sprintf('Unable to load user by token "%s"', $token)
+                sprintf('Unable to load user by %s "%s"', $name, $value)
             );
         }
 
