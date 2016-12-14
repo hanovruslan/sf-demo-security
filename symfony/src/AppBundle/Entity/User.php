@@ -16,26 +16,21 @@ class User implements UserInterface
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(unique=true)
      */
-    private $username;
+    protected $username;
 
     /**
      * @ORM\Column(unique=true)
      */
-    private $token;
+    protected $token;
 
     public function getId()
     {
         return $this->id;
-    }
-
-    public function getUsername()
-    {
-        return $this->username;
     }
 
     public function getRoles()
@@ -43,6 +38,7 @@ class User implements UserInterface
         return [
             'ROLE_CLIENT',
             'ROLE_MANAGER',
+            'ROLE_ADMIN',
         ];
     }
 
@@ -57,6 +53,14 @@ class User implements UserInterface
     public function eraseCredentials()
     {
         //for compatibility
+    }
+
+    /**
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->username;
     }
 
     /**
@@ -80,5 +84,13 @@ class User implements UserInterface
         $this->token = $token;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToken()
+    {
+        return $this->token;
     }
 }

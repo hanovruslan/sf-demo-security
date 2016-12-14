@@ -44,4 +44,52 @@ class DefaultController extends Controller
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
         ]);
     }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/view", name="view")
+     */
+    public function voteForViewAction()
+    {
+        $object = new \stdClass;
+        $object->username = 'foo';
+        $this->denyAccessUnlessGranted('view', $object);
+
+        return $this->render('default/morozov.html.twig', [
+            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+        ]);
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/edit", name="edit")
+     */
+    public function voteForEditAction()
+    {
+        $object = new \stdClass;
+        $object->username = 'bar';
+        $this->denyAccessUnlessGranted('edit', $object);
+
+        return $this->render('default/morozov.html.twig', [
+            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+        ]);
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/delete", name="delete")
+     */
+    public function voteForDeleteAction()
+    {
+        $object = new \stdClass;
+        $object->username = 'bar';
+        $this->denyAccessUnlessGranted('delete', $object);
+
+        return $this->render('default/morozov.html.twig', [
+            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+        ]);
+    }
 }

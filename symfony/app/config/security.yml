@@ -1,6 +1,8 @@
 # To get started with security, check out the documentation:
 # http://symfony.com/doc/current/book/security.html
 security:
+#    access_decision_manager:
+#        strategy: unanimous
     providers:
         token:
             id: app.provider.user_token
@@ -18,10 +20,10 @@ security:
             stateless: true
         morozov:
             guard:
-                entry_point: app.security.authenticator_public_morozov
+                entry_point: app.security.authenticator_token
                 authenticators:
-                    - app.security.authenticator_public_morozov
                     - app.security.authenticator_token
+                    - app.security.authenticator_public_morozov
             pattern: ^/morozov
             provider: token
             stateless: true
@@ -32,6 +34,11 @@ security:
             pattern: ^/
             provider: token
             stateless: true
+    role_hierarchy:
+        ROLE_ADMIN:
+            - ROLE_MANAGER
+            - ROLE_CLIENT
     access_control:
-        - { path: ^/admin, roles: ROLE_MANAGER }
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/morozov, roles: ROLE_MANAGER }
         - { path: ^/, roles: ROLE_CLIENT }
