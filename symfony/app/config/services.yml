@@ -1,20 +1,29 @@
 # Learn more about services, parameters and containers at
 # http://symfony.com/doc/current/book/service_container.html
 parameters:
-    app.class.token_authenticator: AppBundle\Security\Guard\TokenGuardAuthenticator
-    app.class.public_morozov_authenticator: AppBundle\Security\Guard\PublicMorozovGuardAuthenticator
-    app.class.token_user_provider: AppBundle\Security\User\TokenUserProvider
+    app.security.guard.class.token_authenticator: AppBundle\Security\Guard\TokenGuardAuthenticator
+    app.security.guard.class.public_morozov_authenticator: AppBundle\Security\Guard\PublicMorozovGuardAuthenticator
+    app.security.user.class.token_user_provider: AppBundle\Security\User\TokenUserProvider
+    app.security.voter.class.std_class: AppBundle\Security\Voter\StdClassVoter
 
 services:
     app.security.authenticator_token:
-        class: "%app.class.token_authenticator%"
+        class: "%app.security.guard.class.token_authenticator%"
     app.security.authenticator_hour_filter_token:
-        class: "%app.class.token_authenticator%"
+        class: "%app.security.guard.class.token_authenticator%"
         arguments:
             - true
     app.security.authenticator_public_morozov:
-        class: "%app.class.public_morozov_authenticator%"
+        class: "%app.security.guard.class.public_morozov_authenticator%"
     app.provider.user_token:
-        class: "%app.class.token_user_provider%"
+        class: "%app.security.user.class.token_user_provider%"
         arguments:
             - "@doctrine.orm.default_entity_manager"
+    app.voter.std_class:
+        class: "%app.security.voter.class.std_class%"
+        arguments:
+            - "@security.access.decision_manager"
+        tags:
+            - { name: security.voter }
+        # small performance boost
+        public: false
