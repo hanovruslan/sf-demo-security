@@ -14,7 +14,7 @@ You can build your own VM box or you can use [my vagrant-helper](https://github.
 
 ```
 cd /path/to/vagrant-helper \
-&& ./pack.sh sf-demo-pack /path/to/this/project/vagrant
+&& ./create-box.sh sf-demo-box /path/to/this/project/vagrant
 ```
 
 Vagrant does not have ability to define path to you Vagrantfile from cli option. Thats why you must change dir
