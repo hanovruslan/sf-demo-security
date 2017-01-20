@@ -4,13 +4,13 @@
 require "yaml"
 settings = YAML.load_file File.expand_path("sf-demo-settings.yml", File.dirname(__FILE__))
 Vagrant.configure(2) do |config|
-    config.vm.define settings["runtime_name"] do |machine|
-        machine.vm.box = settings["name"]
-        machine.vm.hostname = settings["runtime_name"]
-        machine.vm.provider :virtualbox do |provider|
-            provider.name = settings["runtime_name"]
+    config.vm.define settings["name"] do |box|
+        box.vm.box = settings["box"]
+        box.vm.hostname = settings["name"]
+        box.vm.provider :virtualbox do |provider|
+            provider.name = settings["name"]
         end
-        machine.vm.network :private_network, ip: settings["ip"]
-        machine.vm.synced_folder ".", "/vagrant", "type": :nfs
+        box.vm.network :private_network, ip: settings["ip"]
+        box.vm.synced_folder ".", "/vagrant", "type": :nfs
     end
 end
