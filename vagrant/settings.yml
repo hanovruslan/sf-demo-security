@@ -1,6 +1,7 @@
 parent_box: debian/jessie64
-box: sf-demo-box
-name: sf-demo
+#parent_box: ubuntu/trusty64
+box: sf-demo
+name: my-sf-demo
 memory: 512
 cpus: 1
 ip: 192.168.50.12
@@ -29,6 +30,6 @@ shell_inline: |
         && apt-get install -y --force-yes docker-engine="${docker_engine_version}" \
         && apt-mark hold docker-engine \
         && usermod -aG docker vagrant \
-        && curl -L ${docker_compose_url} > ${dc_path} \
-        && chmod +x ${dc_path}
+        && curl -L ${docker_compose_url} > ${docker_compose_path} \
+        && chmod +x ${docker_compose_path}
     }

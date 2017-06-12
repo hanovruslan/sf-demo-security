@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 require "yaml"
-settings = YAML.load_file File.expand_path("sf-demo-settings.yml", File.dirname(__FILE__))
+settings = YAML.load_file File.expand_path("settings.yml", File.dirname(__FILE__))
 Vagrant.configure(2) do |config|
     config.vm.define settings["name"] do |box|
         box.vm.box = settings["box"]
