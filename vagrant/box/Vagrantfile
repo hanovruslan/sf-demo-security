@@ -1,0 +1,36 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+require "yaml"
+settings = YAML.load_file File.expand_path("../settings.yml", File.dirname(__FILE__))
+$machine_name = $machine_name ? $machine_name : settings["machine_name"]
+Vagrant.configure(2) do |config|
+    config.vm.define $machine_name do |machine|
+        machine.vm.box = settings["parent_box"]
+        machine.vm.hostname = $machine_name
+        machine.vm.provider :virtualbox do |provider|
+            provider.name = $machine_name
+            provider.memory = settings["memory"]
+            provider.cpus = settings["cpus"]
+        end
+        machine.vm.box_check_update = false
+        machine.vm.synced_folder ".", "/vagrant", "disabled": true
+        machine.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+        machine.vm.provision :shell do |provider|
+            provider.inline = settings["shell_inline"]
+            provider.privileged = true
+            provider.env = {
+                apt_key_dsn: "hkp://p80.pool.sks-keyservers.net:80",
+                apt_key_recv: "58118E89F3A912897C070ADBF76221572C52609D",
+                apt_docker_source_path: "/etc/apt/sources.list.d/docker.list",
+                apt_source_string: "deb https://apt.dockerproject.org/repo debian-jessie main",
+#                 apt_source_string: "deb https://apt.dockerproject.org/repo ubuntu-trusty main",
+                docker_engine_version: "17.03.0~ce-0~debian-jessie",
+#                 docker_engine_version: "17.03.0~ce-0~ubuntu-trusty",
+                docker_compose_path: "/usr/local/bin/docker-compose",
+                docker_compose_url: "https://github.com/docker/compose/releases/download/1.9.0/run.sh",
+                locale: "en_US.UTF-8",
+            }
+        end
+    end
+end
