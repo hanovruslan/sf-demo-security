@@ -4,7 +4,7 @@ box: sf-demo
 name: my-sf-demo
 memory: 512
 cpus: 1
-ip: 192.168.50.12
+ip: 192.168.1.128
 shell_inline: |
     dpkg -l docker-engine 1>/dev/null 2>&1 || {
         {
