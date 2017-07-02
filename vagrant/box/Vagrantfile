@@ -7,15 +7,6 @@ $machine_name = $machine_name ? $machine_name : settings["machine_name"]
 Vagrant.configure(2) do |config|
     config.vm.define $machine_name do |machine|
         machine.vm.box = settings["parent_box"]
-        machine.vm.hostname = $machine_name
-        machine.vm.provider :virtualbox do |provider|
-            provider.name = $machine_name
-            provider.memory = settings["memory"]
-            provider.cpus = settings["cpus"]
-        end
-        machine.vm.box_check_update = false
-        machine.vm.synced_folder ".", "/vagrant", "disabled": true
-        machine.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
         machine.vm.provision :shell do |provider|
             provider.inline = settings["shell_inline"]
             provider.privileged = true
