@@ -1,0 +1,7 @@
+gpg_docker_url: https://download.docker.com/linux/debian/gpg
+apt_docker_source_path: /etc/apt/sources.list.d/docker.list
+apt_source_string: deb https://download.docker.com/linux/debian stretch stable
+docker_engine_version: 18.03.0~ce-0~debian
+docker_compose_path: /usr/local/bin/docker-compose
+docker_compose_url: https://github.com/docker/compose/releases/download/1.9.0/run.sh
+locale: en_US.UTF-8
